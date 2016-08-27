@@ -1,0 +1,4 @@
+file "NDPluginBase_settings.req", P=$(P), R=$(R)
+$(P)$(R)KernelWidth
+$(P)$(R)KernelHeight
+$(P)$(R)BlurType

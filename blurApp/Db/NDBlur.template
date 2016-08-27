@@ -1,0 +1,68 @@
+# Database for NDPluginBlur
+# Alireza Panna
+# August 22, 2016
+
+include "NDPluginBase.template"
+
+record( ao, "$(P)$(R)KernelWidth")
+{
+    field(PINI,  "YES")
+    field(DTYP,  "asynInt32")
+    field(OUT,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))KERNEL_WIDTH")
+    field(VAL,   "3.0")
+}
+record( ai, "$(P)$(R)KernelWidth_RBV")
+{
+    field(DTYP,  "asynInt32")
+    field(INP,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))KERNEL_WIDTH")
+    field(SCAN,  "I/O Intr")
+}
+record( ao, "$(P)$(R)KernelHeight")
+{
+    field(PINI,  "YES")
+    field(DTYP,  "asynInt32")
+    field(OUT,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))KERNEL_HEIGHT")
+    field(VAL,   "3.0")
+}
+record( ai, "$(P)$(R)KernelHeight_RBV")
+{
+    field(DTYP,  "asynInt32")
+    field(INP,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))KERNEL_HEIGHT")
+    field(SCAN,  "I/O Intr")
+}
+
+record(mbbo, "$(P)$(R)BlurType")
+{
+   field(PINI, "YES")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))BLUR_TYPE")
+   field(ZRST, "None")
+   field(ZRVL, "0")
+   field(ONST, "Normalized Block")
+   field(ONVL, "1")
+   field(TWST, "Gaussian")
+   field(TWVL, "2")
+   field(THST, "Median")
+   field(THVL, "3")
+   field(FRST, "Bilateral")
+   field(FRVL, "4")
+   field(VAL,  "0")
+   info(autosaveFields, "VAL")
+}
+
+record(mbbi, "$(P)$(R)BlurType_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))BLUR_TYPE")
+   field(ZRST, "None")
+   field(ZRVL, "0")
+   field(ONST, "Normalized Block")
+   field(ONVL, "1")
+   field(TWST, "Gaussian")
+   field(TWVL, "2")
+   field(THST, "Median")
+   field(THVL, "3")
+   field(FRST, "Bilateral")
+   field(FRVL, "4")
+   field(SCAN, "I/O Intr")
+}
