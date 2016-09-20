@@ -7,6 +7,7 @@
  * Author: Alireza Panna NIH/NHLBI/IPL
  *
  * Created Aug 24, 2016
+ * TODO: Remove debug prints, thoroughly test the plugin.
  *
  * Change Log:
  */
@@ -107,8 +108,8 @@ void doBlur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arrayInfo, int k
       /* when ksize is 3 or 5, the image depth should be CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U */
       try 
       {
-        //cv::Mat inImg1;
-        //inImg.convertTo(inImg1, CV_32F);
+        // cv::Mat inImg1;
+        // inImg.convertTo(inImg1, CV_32F);
         cv::medianBlur(inImg, outImg, kernelWidth);
         tempData = (unsigned char *)outImg.data;
         memcpy(outData, tempData, nElements * sizeof(float));
@@ -121,7 +122,7 @@ void doBlur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arrayInfo, int k
       break;
 
     case (Bilateral):
-      /* 8-bit or floating-point, 1-channel or 3-channel image */
+      /* 8-bit or floating-point, 1-channel or 3-channel image. This needs to be tested */
       try 
       {
         cv::bilateralFilter(inImg, outImg, kernelWidth, 5, 5);
@@ -169,11 +170,9 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   /* Copy the information from the current array */
   this->pArrays[0] = this->pNDArrayPool->copy(pArray, NULL, 1);
   blurredArray = this->pArrays[0];
+  /* Convert to 32 bit float for smoothing operations, since all filters support float32 input arrays */
   this->pNDArrayPool->convert(pArray, &pArray, NDFloat32);
   this->pNDArrayPool->convert(pArray, &blurredArray, NDFloat32);
-
-  
-  
   if(pArray->ndims > 0 && pArray->ndims <= 3) 
   {
     this->blur(pArray, blurredArray, &arrayInfo);
@@ -187,6 +186,7 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   }
   this->lock();
   getIntegerParam(NDDataType,     &dataType);
+  /* Convert back to the input datatype */
   this->pNDArrayPool->convert(blurredArray, &blurredArray, (NDDataType_t)dataType);
   this->getAttributes(blurredArray->pAttributeList);
   this->unlock();
@@ -217,7 +217,7 @@ void NDPluginBlur::blur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arra
     kernelHeight += 1;
     setIntegerParam(NDPluginBlurKernelHeight,  kernelHeight);
   }
-  //printf("datatype: %d\n", inArray->dataType);
+  // printf("datatype: %d\n", inArray->dataType);
   doBlur(inArray, outArray, arrayInfo, kernelWidth, kernelHeight, blurType);
   return;
 }

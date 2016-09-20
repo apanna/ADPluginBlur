@@ -233,16 +233,16 @@ border-radius: 2px;
      <rect>
       <x>40</x>
       <y>615</y>
-      <width>262</width>
+      <width>231</width>
       <height>22</height>
      </rect>
     </property>
     <widget class="caLabel" name="caLabel_1">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>-15</x>
        <y>0</y>
-       <width>130</width>
+       <width>131</width>
        <height>20</height>
       </rect>
      </property>
@@ -378,7 +378,7 @@ border-radius: 2px;
      <rect>
       <x>20</x>
       <y>640</y>
-      <width>282</width>
+      <width>251</width>
       <height>22</height>
      </rect>
     </property>
@@ -551,9 +551,9 @@ border-radius: 2px;
    <widget class="caLabel" name="caLabel_3">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>20</x>
       <y>590</y>
-      <width>130</width>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -639,7 +639,7 @@ border-radius: 2px;
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>620</y>
+      <y>617</y>
       <width>100</width>
       <height>18</height>
      </rect>
@@ -690,7 +690,7 @@ border-radius: 2px;
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>643</y>
+      <y>641</y>
       <width>100</width>
       <height>18</height>
      </rect>

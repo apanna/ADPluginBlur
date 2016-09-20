@@ -30,7 +30,6 @@ record( ai, "$(P)$(R)KernelHeight_RBV")
     field(INP,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))KERNEL_HEIGHT")
     field(SCAN,  "I/O Intr")
 }
-
 record(mbbo, "$(P)$(R)BlurType")
 {
    field(PINI, "YES")
@@ -49,7 +48,6 @@ record(mbbo, "$(P)$(R)BlurType")
    field(VAL,  "0")
    info(autosaveFields, "VAL")
 }
-
 record(mbbi, "$(P)$(R)BlurType_RBV")
 {
    field(DTYP, "asynInt32")
