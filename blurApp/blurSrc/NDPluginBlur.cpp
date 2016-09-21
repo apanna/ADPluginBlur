@@ -151,7 +151,7 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   NDArray *blurredArray;
   NDArrayInfo_t arrayInfo;
   int dataType;
-  static const char* functionName = "processCallbacks";
+  static const char* functionName = "NDPluginBlur::processCallbacks";
   //printf("In function: %s\n", functionName);
   /* Call the base class method */
   NDPluginDriver::processCallbacks(pArray);
@@ -173,16 +173,18 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   /* Convert to 32 bit float for smoothing operations, since all filters support float32 input arrays */
   this->pNDArrayPool->convert(pArray, &pArray, NDFloat32);
   this->pNDArrayPool->convert(pArray, &blurredArray, NDFloat32);
-  if(pArray->ndims > 0 && pArray->ndims <= 3) 
-  {
-    this->blur(pArray, blurredArray, &arrayInfo);
-  }
-  else 
-  {
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-        "%s: error, number of array dimensions must be less than or equal to 3\n",
+  // This plugin only works with 1-D or 2-D arrays
+  switch (pArray->ndims) {
+    case 1:
+    case 2:
+      this->blur(pArray, blurredArray, &arrayInfo);
+      break;
+    default:
+      asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+        "%s: error, number of array dimensions must be 1 or 2\n",
         functionName);
-    return;
+      return;
+      break;
   }
   this->lock();
   getIntegerParam(NDDataType,     &dataType);
@@ -200,7 +202,7 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
 void NDPluginBlur::blur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arrayInfo)
 {
   int kernelWidth, kernelHeight, blurType;
-  static const char* functionName = "blur";
+  static const char* functionName = "NDPluginBlur::blur";
   //printf("In function: %s\n", functionName);
   getIntegerParam(NDPluginBlurKernelWidth,   &kernelWidth);
   getIntegerParam(NDPluginBlurKernelHeight,  &kernelHeight);
