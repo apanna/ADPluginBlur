@@ -47,8 +47,9 @@ void doBlur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arrayInfo, int k
   size_t numRows, rowSize;
   unsigned char *inData, *outData, *tempData;
   size_t nElements, elementSize;
-  /** function name */
+
   static const char* functionName = "doBlur";
+  
   rowSize     = inArray->dims[arrayInfo->xDim].size;
   numRows     = inArray->dims[arrayInfo->yDim].size;
   nElements   = arrayInfo->nElements;
@@ -151,8 +152,9 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   NDArray *blurredArray;
   NDArrayInfo_t arrayInfo;
   int dataType;
+
   static const char* functionName = "NDPluginBlur::processCallbacks";
-  //printf("In function: %s\n", functionName);
+  // printf("In function: %s\n", functionName);
   /* Call the base class method */
   NDPluginDriver::processCallbacks(pArray);
   /** Create a pointer to a structure of type NDArrayInfo_t and use it to get information about
@@ -191,9 +193,7 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   /* Convert back to the input datatype */
   this->pNDArrayPool->convert(blurredArray, &blurredArray, (NDDataType_t)dataType);
   this->getAttributes(blurredArray->pAttributeList);
-  this->unlock();
-  doCallbacksGenericPointer(blurredArray, NDArrayData,0);
-  this->unlock();
+  doCallbacksGenericPointer(blurredArray, NDArrayData, 0);
   callParamCallbacks();
 }
 
