@@ -30,7 +30,7 @@
 
 #include <opencv2/opencv.hpp>
 
-static const char *driverName="NDPluginBlur";
+static const char *driverName = "NDPluginBlur";
 /* Enums to describe the types of smoothing filter */
 typedef enum 
 {
@@ -109,8 +109,6 @@ void doBlur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arrayInfo, int k
       /* when ksize is 3 or 5, the image depth should be CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U */
       try 
       {
-        // cv::Mat inImg1;
-        // inImg.convertTo(inImg1, CV_32F);
         cv::medianBlur(inImg, outImg, kernelWidth);
         tempData = (unsigned char *)outImg.data;
         memcpy(outData, tempData, nElements * sizeof(float));
@@ -153,12 +151,12 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
   NDArrayInfo_t arrayInfo;
   int dataType;
 
-  static const char* functionName = "NDPluginBlur::processCallbacks";
+  static const char* functionName = "processCallbacks";
   // printf("In function: %s\n", functionName);
   /* Call the base class method */
   NDPluginDriver::processCallbacks(pArray);
   /** Create a pointer to a structure of type NDArrayInfo_t and use it to get information about
-    the input array.
+      the input array.
   */
   pArray->getInfo(&arrayInfo);
   /* Previous version of the array was held in memory.  Release it and reserve a new one. */
@@ -183,8 +181,8 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
       break;
     default:
       asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
-        "%s: error, number of array dimensions must be 1 or 2\n",
-        functionName);
+        "%s::%s: error, number of array dimensions must be 1 or 2\n",
+        driverName, functionName);
       return;
       break;
   }
@@ -202,13 +200,20 @@ void NDPluginBlur::processCallbacks(NDArray *pArray)
 void NDPluginBlur::blur(NDArray *inArray, NDArray *outArray, NDArrayInfo_t *arrayInfo)
 {
   int kernelWidth, kernelHeight, blurType;
-  static const char* functionName = "NDPluginBlur::blur";
+  static const char* functionName = "blur";
   //printf("In function: %s\n", functionName);
   getIntegerParam(NDPluginBlurKernelWidth,   &kernelWidth);
   getIntegerParam(NDPluginBlurKernelHeight,  &kernelHeight);
   getIntegerParam(NDPluginBlurBlurType_,     &blurType);
   //printf("BLURTYPE=%d\nWIDTH=%d\nHEIGHT=%d\n", blurType, kernelWidth, kernelHeight);
-  /* kernel width and height should be odd */ 
+  /* kernel width and height should be non negative and odd */ 
+  if (kernelWidth <= 0 && kernelHeight <= 0)
+  {
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+    "%s::%s: kernel width and height should be > 0\n",
+    driverName, functionName);
+    return;
+  }
   if (kernelWidth % 2 == 0) 
   {
     kernelWidth += 1;
