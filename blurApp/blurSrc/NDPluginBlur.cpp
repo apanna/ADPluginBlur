@@ -278,9 +278,9 @@ extern "C" int NDBlurConfigure(const char *portName, int queueSize, int blocking
                                  int maxBuffers, size_t maxMemory,
                                  int priority, int stackSize)
 {
-    new NDPluginBlur(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
-                        maxBuffers, maxMemory, priority, stackSize);
-    return(asynSuccess);
+    NDPluginBlur *pPlugin = new NDPluginBlur(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
+                                              maxBuffers, maxMemory, priority, stackSize);
+    return pPlugin->start();
 }
 
 /* EPICS iocsh shell commands */
